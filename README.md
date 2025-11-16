@@ -24,63 +24,84 @@ In timing diagram Q0 is changing as soon as the negative edge of clock pulse is 
 
 **Procedure**
 
-/* 
-
-     1.Increment count on each positive edge of the clock. 
-     2.Reset count to zero when it reaches 15. 
-     3.Generate clock signal (clk). 
-     4.Instantiate the RippleCounter module. 
-     5.Conduct functional testing by displaying the count at each clock cycle for 16 cycles.
-
-
-*/
+1.Increment count on each positive edge of the clock.
+2.Reset count to zero when it reaches 15. 
+3.Generate clock signal (clk).
+4.Instantiate the RippleCounter module.
+5.Conduct functional testing by displaying the count at each clock cycle for 16 cycles. 
 
 **PROGRAM**
 
 /* Program for 4 Bit Ripple Counter and verify its truth table in quartus using Verilog programming.
+```
+module RippleCounter(
+   input wire clk,  // Clock input
+   output reg [3:0] count // 4-bit counter output
+);
 
-    module ripple (
-    input clk,     // Clock input
-    input reset,   // Reset input (active high)
-    output [3:0] q // 4-bit output
-    );
-   // Internal signals for flip-flops
-   reg [3:0] q_int;
+// Counter logic
+always @(posedge clk) begin
+   if (count == 4'b1111) // Reset when count reaches 15
+       count <= 4'b0000;
+   else
+       count <= count + 1; // Increment count
+end
 
-    // Assign internal register to output
-    assign q = q_int;
-  
-    always @(posedge clk or posedge reset) begin
-    if (reset) 
-        q_int[0] <= 1'b0; // Reset the first bit to 0
-    else 
-        q_int[0] <= ~q_int[0]; // Toggle the first bit on clock edge
+endmodule
+
+// Testbench
+module RippleCounter_tb;
+
+// Inputs
+reg clk;
+
+// Outputs
+wire [3:0] count;
+
+// Instantiate the counter
+RippleCounter uut(
+   .clk(clk),
+   .count(count)
+);
+
+// Clock generation
+initial begin
+   clk = 0;
+   forever #5 clk = ~clk; // Toggle clock every 5 time units
+end
+
+// Stimulus
+initial begin
+   // Wait for a few clock cycles
+   #10;
+   
+   // Display header
+   $display("Time | Count");
+   $display("-----------------");
+   
+   // Functional table testing
+   // Increment count 16 times and display the count
+   repeat (16) begin
+       #5; // Wait for one clock cycle
+       $display("%4d | %b", $time, count);
    end
+   
+   // End simulation
+   $finish;
+end
 
-   
-     // Generate the other flip-flops based on the output of the previous one
-     genvar i;
-      generate
-     for (i = 1; i < 4; i = i + 1) begin : ripple
-     always @(posedge q_int[i-1] or posedge reset) begin
-     if (reset) 
-     q_int[i] <= 1'b0; // Reset the bit to 0
-     else 
-      q_int[i] <= ~q_int[i]; // Toggle the bit on clock edge of previous stage
-      end
-      end
-     endgenerate
-      endmodule
-   
-    
-   Developed by:S.Ravant Vignesh RegisterNumber:24900151
+endmodule
+```
+
+ Developed by: Renick Fabian Rajesh
+ 
+ RegisterNumber: 212224230227
+ 
 */
 
 **RTL LOGIC FOR 4 Bit Ripple Counter**
-![image](https://github.com/user-attachments/assets/66bd0113-ca93-4a12-9248-219b6067db78)
-
+![Screenshot 2024-11-19 110335](https://github.com/user-attachments/assets/a8bee129-61f4-45e3-9484-e467b258c616)
 **TIMING DIGRAMS FOR 4 Bit Ripple Counter**
-![image](https://github.com/user-attachments/assets/590e3fe3-02a8-4176-8a8b-afe2ae9f7692)
-
+![Screenshot 2024-11-19 110348](https://github.com/user-attachments/assets/ffec46f9-a910-44b0-bbc2-577ebaef7941)
 **RESULTS**
-THE 4 BIT RIPPLE COUNTER IS VERIFIED SUCCESSFULLY.
+Thus the program executed succesfully.
