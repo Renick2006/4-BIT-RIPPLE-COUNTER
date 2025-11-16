@@ -1,5 +1,6 @@
 # 4-BIT-RIPPLE-COUNTER
-
+## Name: Renick Fabian Rajesh
+## Reg No: 212224230227
 **AIM:**
 
 To implement  4 Bit Ripple Counter using verilog and validating their functionality using their functional tables
